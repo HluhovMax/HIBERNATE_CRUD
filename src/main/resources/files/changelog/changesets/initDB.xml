@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+        <changeSet id="initializing database hibernate_crud_db" author="holosievo@gmail.com">
+            <createTable tableName="skill">
+                <column name="id" type="int" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false"/>
+                </column>
+                <column name="name" type="varchar(30)">
+                    <constraints unique="true"/>
+                </column>
+            </createTable>
+            <createTable tableName="developer">
+                <column name="id" type="int" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false"/>
+                </column>
+                <column name="first_name" type="varchar(30)"/>
+                <column name="last_name" type="varchar(30)"/>
+                <column name="specialty" type="varchar(30)"/>
+                <column name="account_id" type="int">
+                    <constraints unique="true"/>
+                </column>
+            </createTable>
+            <createTable tableName="account">
+                <column name="id" type="int" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false"/>
+                </column>
+                <column name="accountData" type="BLOB">
+                </column>
+            </createTable>
+            <createTable tableName="developer_skill">
+                <column name="developer_id" type="int"/>
+                <column name="skill_id" type="int"/>
+            </createTable>
+        </changeSet>
+</databaseChangeLog>

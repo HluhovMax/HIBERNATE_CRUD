@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet id="adding FK for developer_skill.developer_id table" author="holosievo@gmai.com">
+        <addForeignKeyConstraint baseTableName="developer_skill" baseColumnNames="developer_id" constraintName="fk_ds.developer_id_d.id" referencedTableName="developer"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="adding FK for developer_skill.skill_id table" author="holosievo@gmai.com">
+        <addForeignKeyConstraint baseTableName="developer_skill" baseColumnNames="skill_id" constraintName="fk_ds.skill_id_s.id" referencedTableName="skill"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="adding FK for developer.account_id table" author="holosievo@gmai.com">
+        <addForeignKeyConstraint baseTableName="developer" baseColumnNames="account_id" constraintName="fk_d.account_id_a.id" referencedTableName="account"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
