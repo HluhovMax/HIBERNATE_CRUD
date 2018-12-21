@@ -3,9 +3,8 @@ package mvc.repository.impl;
 import mvc.model.Developer;
 import mvc.repository.DeveloperRepository;
 import mvc.util.SessionFactoryUtil;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 
 import java.util.List;
 
@@ -13,16 +12,10 @@ public class DeveloperRepoImpl implements DeveloperRepository {
 
     @Override
     public void save(Developer developer) {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+            session.beginTransaction();
             session.save(developer);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().commit();
         }
     }
 
@@ -36,9 +29,8 @@ public class DeveloperRepoImpl implements DeveloperRepository {
 
     @Override
     public void update(Developer developer) {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+            session.beginTransaction();
             Developer tempDeveloper = session.get(Developer.class, developer.getId());
             tempDeveloper.setFirstName(developer.getFirstName());
             tempDeveloper.setLastName(developer.getLastName());
@@ -46,45 +38,27 @@ public class DeveloperRepoImpl implements DeveloperRepository {
             tempDeveloper.setSkillSet(developer.getSkillSet());
             tempDeveloper.setAccount(developer.getAccount());
             session.update(tempDeveloper);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().commit();
         }
     }
 
     @Override
     public List<Developer> getAll() {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            List<Developer> developers = session.createQuery("FROM Developer ").list();
-            transaction.commit();
+            session.beginTransaction();
+            List<Developer> developers = session.createQuery("FROM Developer ").getResultList();
+            session.getTransaction().commit();
             return developers;
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
         }
-        return null;
     }
 
     @Override
     public void delete(Integer id) {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+            session.beginTransaction();
             Developer developer = session.get(Developer.class, id);
             session.delete(developer);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().commit();
         }
     }
 }

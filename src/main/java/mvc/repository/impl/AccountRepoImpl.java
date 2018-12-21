@@ -3,9 +3,7 @@ package mvc.repository.impl;
 import mvc.model.Account;
 import mvc.repository.AccountRepository;
 import mvc.util.SessionFactoryUtil;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.util.List;
 
@@ -13,16 +11,10 @@ public class AccountRepoImpl implements AccountRepository {
 
     @Override
     public void save(Account account) {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+            session.beginTransaction();
             session.save(account);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().commit();
         }
     }
 
@@ -36,52 +28,32 @@ public class AccountRepoImpl implements AccountRepository {
 
     @Override
     public void update(Account account) {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            Account tempAccount;
-            tempAccount = session.get(Account.class, account.getId());
+            session.beginTransaction();
+            Account tempAccount = session.get(Account.class, account.getId());
             tempAccount.setAccountData(account.getAccountData());
             session.update(tempAccount);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().commit();
         }
     }
 
     @Override
     public List<Account> getAll() {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            List<Account> accounts = session.createQuery("FROM Account ").list();
-            transaction.commit();
+            session.beginTransaction();
+            List<Account> accounts = session.createQuery("FROM Account ").getResultList();
+            session.getTransaction().commit();
             return accounts;
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
         }
-        return null;
     }
 
     @Override
     public void delete(Integer id) {
-        Transaction transaction = null;
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+            session.beginTransaction();
             Account account = session.get(Account.class, id);
             session.delete(account);
-            transaction.commit();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            session.getTransaction().commit();
         }
     }
 }
