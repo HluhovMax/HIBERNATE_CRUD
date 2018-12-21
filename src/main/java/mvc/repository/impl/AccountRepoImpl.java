@@ -21,7 +21,7 @@ public class AccountRepoImpl implements AccountRepository {
     @Override
     public Account getById(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Account account = session.get(Account.class, id);
+            Account account = session.load(Account.class, id);
             return account;
         }
     }
@@ -30,7 +30,7 @@ public class AccountRepoImpl implements AccountRepository {
     public void update(Account account) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Account tempAccount = session.get(Account.class, account.getId());
+            Account tempAccount = session.load(Account.class, account.getId());
             tempAccount.setAccountData(account.getAccountData());
             session.update(tempAccount);
             session.getTransaction().commit();
@@ -51,7 +51,7 @@ public class AccountRepoImpl implements AccountRepository {
     public void delete(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Account account = session.get(Account.class, id);
+            Account account = session.load(Account.class, id);
             session.delete(account);
             session.getTransaction().commit();
         }

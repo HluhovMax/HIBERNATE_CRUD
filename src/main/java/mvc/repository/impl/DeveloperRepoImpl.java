@@ -22,7 +22,7 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     @Override
     public Developer getById(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Developer developer = session.get(Developer.class, id);
+            Developer developer = session.load(Developer.class, id);
             return developer;
         }
     }
@@ -31,7 +31,7 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     public void update(Developer developer) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Developer tempDeveloper = session.get(Developer.class, developer.getId());
+            Developer tempDeveloper = session.load(Developer.class, developer.getId());
             tempDeveloper.setFirstName(developer.getFirstName());
             tempDeveloper.setLastName(developer.getLastName());
             tempDeveloper.setSpecialty(developer.getSpecialty());
@@ -56,7 +56,7 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     public void delete(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Developer developer = session.get(Developer.class, id);
+            Developer developer = session.load(Developer.class, id);
             session.delete(developer);
             session.getTransaction().commit();
         }
