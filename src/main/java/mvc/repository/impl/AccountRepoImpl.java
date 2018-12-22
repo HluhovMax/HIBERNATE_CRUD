@@ -30,9 +30,8 @@ public class AccountRepoImpl implements AccountRepository {
     public void update(Account account) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Account tempAccount = session.load(Account.class, account.getId());
+            Account tempAccount = session.get(Account.class, account.getId());
             tempAccount.setAccountData(account.getAccountData());
-            session.update(tempAccount);
             session.getTransaction().commit();
         }
     }

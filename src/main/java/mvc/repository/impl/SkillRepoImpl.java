@@ -22,7 +22,7 @@ public class SkillRepoImpl implements SkillRepository {
     @Override
     public Skill getById(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Skill skill = session.load(Skill.class, id);
+            Skill skill = session.get(Skill.class, id);
             return skill;
         }
     }
@@ -33,7 +33,6 @@ public class SkillRepoImpl implements SkillRepository {
             session.beginTransaction();
             Skill tempSkill = session.load(Skill.class, skill.getId());
             tempSkill.setName(skill.getName());
-            session.update(tempSkill);
             session.getTransaction().commit();
         }
     }

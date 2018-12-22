@@ -22,7 +22,7 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     @Override
     public Developer getById(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Developer developer = session.load(Developer.class, id);
+            Developer developer = session.get(Developer.class, id);
             return developer;
         }
     }
@@ -37,7 +37,6 @@ public class DeveloperRepoImpl implements DeveloperRepository {
             tempDeveloper.setSpecialty(developer.getSpecialty());
             tempDeveloper.setSkillSet(developer.getSkillSet());
             tempDeveloper.setAccount(developer.getAccount());
-            session.update(tempDeveloper);
             session.getTransaction().commit();
         }
     }
