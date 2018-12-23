@@ -32,7 +32,7 @@ public class DeveloperView {
             System.out.println("enter skill id:");
             skills.add(skillController.getById(intScanner.nextInt()));
         }
-        developer.setSkillSet(skills);
+        developer.setSkills(skills);
         System.out.println("enter account id:");
         developer.setAccount(accountController.getById(intScanner.nextInt()));
         if (developer != null) {
@@ -63,7 +63,7 @@ public class DeveloperView {
             System.out.println("enter skill id:");
             skills.add(skillController.getById(intScanner.nextInt()));
         }
-        developer.setSkillSet(skills);
+        developer.setSkills(skills);
         System.out.println("enter account id:");
         developer.setAccount(accountController.getById(intScanner.nextInt()));
         if (developer != null) {
@@ -81,7 +81,7 @@ public class DeveloperView {
     }
 
     public void delete() {
-        System.out.println("enetr id:");
+        System.out.println("enter id:");
         developerController.delete(intScanner.nextInt());
     }
 }

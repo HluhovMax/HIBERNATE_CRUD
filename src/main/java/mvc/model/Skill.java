@@ -1,5 +1,8 @@
 package mvc.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,16 +17,10 @@ public class Skill {
     private int id;
     @Column(name = "name")
     private String name;
-    @ManyToMany(mappedBy = "skillSet" , fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "skills")
     private Set<Developer> developers = new HashSet<>();
 
-
     public Skill() {
-    }
-
-    public Skill(String name) {
-        this.name = name;
-
     }
 
     public int getId() {
@@ -40,6 +37,14 @@ public class Skill {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Developer> getDevelopers() {
+        return developers;
+    }
+
+    public void setDevelopers(Set<Developer> developers) {
+        this.developers = developers;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class AccountRepoImpl implements AccountRepository {
     @Override
     public Account getById(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Account account = session.load(Account.class, id);
+            Account account = session.get(Account.class, id);
             return account;
         }
     }

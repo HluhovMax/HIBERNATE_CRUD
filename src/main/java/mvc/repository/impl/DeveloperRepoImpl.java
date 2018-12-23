@@ -5,7 +5,7 @@ import mvc.repository.DeveloperRepository;
 import mvc.util.SessionFactoryUtil;
 import org.hibernate.Session;
 
-
+import javax.persistence.Query;
 import java.util.List;
 
 public class DeveloperRepoImpl implements DeveloperRepository {
@@ -22,7 +22,9 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     @Override
     public Developer getById(Integer id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Developer developer = session.get(Developer.class, id);
+            Developer developer = session.createQuery("FROM Developer d LEFT JOIN FETCH " +
+                    "d.skills" +
+                    " WHERE d.id = :id ", Developer.class).setParameter("id", id).getSingleResult();
             return developer;
         }
     }
@@ -31,12 +33,8 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     public void update(Developer developer) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Developer tempDeveloper = session.load(Developer.class, developer.getId());
-            tempDeveloper.setFirstName(developer.getFirstName());
-            tempDeveloper.setLastName(developer.getLastName());
-            tempDeveloper.setSpecialty(developer.getSpecialty());
-            tempDeveloper.setSkillSet(developer.getSkillSet());
-            tempDeveloper.setAccount(developer.getAccount());
+            Developer developerToSave = session.get(Developer.class, developer.getId());
+            setters(developerToSave, developer);
             session.getTransaction().commit();
         }
     }
@@ -45,7 +43,8 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     public List<Developer> getAll() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            List<Developer> developers = session.createQuery("FROM Developer ").getResultList();
+            List<Developer> developers = session.createQuery("FROM Developer d LEFT JOIN FETCH " +
+                    "d.skills").getResultList();
             session.getTransaction().commit();
             return developers;
         }
@@ -59,5 +58,14 @@ public class DeveloperRepoImpl implements DeveloperRepository {
             session.delete(developer);
             session.getTransaction().commit();
         }
+    }
+
+    private Developer setters(Developer developerToSave, Developer developer) {
+        developerToSave.setFirstName(developer.getFirstName());
+        developerToSave.setLastName(developer.getLastName());
+        developerToSave.setSpecialty(developer.getSpecialty());
+        developerToSave.setSkills(developer.getSkills());
+        developerToSave.setAccount(developer.getAccount());
+        return developerToSave;
     }
 }
