@@ -32,9 +32,17 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     @Override
     public void update(Developer developer) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
             Developer developerToSave = session.get(Developer.class, developer.getId());
-            setters(developerToSave, developer);
+            session.beginTransaction();
+            developerToSave = developerToSave.builder()
+                    .id(developer.getId())
+                    .firstName(developer.getFirstName())
+                    .lastName(developer.getLastName())
+                    .specialty(developer.getSpecialty())
+                    .skills(developer.getSkills())
+                    .account(developer.getAccount())
+                    .build();
+            session.merge(developerToSave);
             session.getTransaction().commit();
         }
     }
@@ -60,12 +68,4 @@ public class DeveloperRepoImpl implements DeveloperRepository {
         }
     }
 
-    private Developer setters(Developer developerToSave, Developer developer) {
-        developerToSave.setFirstName(developer.getFirstName());
-        developerToSave.setLastName(developer.getLastName());
-        developerToSave.setSpecialty(developer.getSpecialty());
-        developerToSave.setSkills(developer.getSkills());
-        developerToSave.setAccount(developer.getAccount());
-        return developerToSave;
-    }
 }
