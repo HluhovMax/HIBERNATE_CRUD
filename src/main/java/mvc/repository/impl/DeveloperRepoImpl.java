@@ -5,7 +5,6 @@ import mvc.repository.DeveloperRepository;
 import mvc.util.SessionFactoryUtil;
 import org.hibernate.Session;
 
-import javax.persistence.Query;
 import java.util.List;
 
 public class DeveloperRepoImpl implements DeveloperRepository {
@@ -32,17 +31,8 @@ public class DeveloperRepoImpl implements DeveloperRepository {
     @Override
     public void update(Developer developer) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Developer developerToSave = session.get(Developer.class, developer.getId());
             session.beginTransaction();
-            developerToSave = developerToSave.builder()
-                    .id(developer.getId())
-                    .firstName(developer.getFirstName())
-                    .lastName(developer.getLastName())
-                    .specialty(developer.getSpecialty())
-                    .skills(developer.getSkills())
-                    .account(developer.getAccount())
-                    .build();
-            session.merge(developerToSave);
+            session.update(developer);
             session.getTransaction().commit();
         }
     }

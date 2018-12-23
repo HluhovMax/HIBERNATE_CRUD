@@ -13,7 +13,7 @@ public class AccountRepoImpl implements AccountRepository {
     public void save(Account account) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            session.save(account);
+            session.persist(account);
             session.getTransaction().commit();
         }
     }
@@ -30,8 +30,7 @@ public class AccountRepoImpl implements AccountRepository {
     public void update(Account account) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Account tempAccount = session.get(Account.class, account.getId());
-            tempAccount.setAccountData(account.getAccountData());
+            session.update(account);
             session.getTransaction().commit();
         }
     }

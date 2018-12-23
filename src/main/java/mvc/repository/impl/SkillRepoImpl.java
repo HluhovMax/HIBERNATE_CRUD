@@ -14,7 +14,7 @@ public class SkillRepoImpl implements SkillRepository {
     public void save(Skill skill) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            session.save(skill);
+            session.persist(skill);
             session.getTransaction().commit();
         }
     }
@@ -31,8 +31,7 @@ public class SkillRepoImpl implements SkillRepository {
     public void update(Skill skill) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Skill tempSkill = session.load(Skill.class, skill.getId());
-            tempSkill.setName(skill.getName());
+            session.update(skill);
             session.getTransaction().commit();
         }
     }
